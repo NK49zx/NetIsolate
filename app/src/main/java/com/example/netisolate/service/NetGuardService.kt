@@ -119,9 +119,19 @@ class NetGuardService : VpnService() {
             }
             
             if (!hasApps) {
-                // If list is empty, add a dummy package to force "allow-list" mode.
-                // This ensures "allow-list" is active but empty, so no real apps are blocked.
-                 builder.addAllowedApplication("com.example.nonexistent.dummy")
+                // If list is empty, add our own package to force "allow-list" mode.
+                // This ensures "allow-list" is active (blocking all other apps from the VPN)
+                // but only "allows" us (who don't need internet) into the sinkhole.
+                // This prevents the "Allow All" default behavior of VpnService.Builder.
+                try {
+                    builder.addAllowedApplication(packageName)
+                } catch (e: Exception) {
+                    Log.e("NetGuardService", "Failed to add self to allow-list", e)
+                    // If we fail to add ANY app, we must abort, otherwise we risk
+                    // starting in "Allow All" mode (Internet Kill Switch).
+                    stopSelf()
+                    return@launch
+                }
             }
 
             builder.setSession("NetGuard")
