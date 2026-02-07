@@ -43,9 +43,11 @@ fun RegistryScreen(
         isLoading = false
     }
 
-    val filteredApps = apps.filter {
-        it.name.contains(searchQuery, ignoreCase = true) ||
-                it.packageName.contains(searchQuery, ignoreCase = true)
+    val filteredApps = remember(apps, searchQuery) {
+        apps.filter {
+            it.name.contains(searchQuery, ignoreCase = true) ||
+                    it.packageName.contains(searchQuery, ignoreCase = true)
+        }
     }
     
     val selectedApps = filteredApps.filter { it.isQuarantined }
