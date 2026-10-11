@@ -5,7 +5,7 @@ description: How to build the Android APK
 To build the debug APK for testing:
 
 1. Open the terminal.
-2. Navigate to the project directory: `c:\Users\PREDATOR\AndroidStudioProjects\NetIsolate`
+2. Navigate to the project root (the folder that contains `gradlew.bat`).
 3. Run the Gradle build command:
 
 ```powershell

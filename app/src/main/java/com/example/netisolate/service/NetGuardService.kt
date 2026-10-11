@@ -136,9 +136,12 @@ class NetGuardService : VpnService() {
 
             builder.setSession("NetGuard")
             builder.setMtu(1500)
-            // Local private IP for the interface
+            // Local private IPs for the interface (IPv4 and IPv6 unique-local)
             builder.addAddress("10.0.0.2", 32)
+            builder.addAddress("fd00::2", 128)
+            // Capture both address families, or quarantined apps could still reach the internet over IPv6
             builder.addRoute("0.0.0.0", 0)
+            builder.addRoute("::", 0)
 
             try {
                 // Close old interface
